@@ -1,0 +1,6 @@
+libfreenect2/
+.vs/
+*.vcxproj.user
+*.aps
+Debug/
+Release/

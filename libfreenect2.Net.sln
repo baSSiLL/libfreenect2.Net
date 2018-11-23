@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfreenect2.Net", "libfreenect2.Net\libfreenect2.Net.vcxproj", "{3093442F-8EA6-415A-9901-245F05ABD778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3093442F-8EA6-415A-9901-245F05ABD778}.Debug|x64.ActiveCfg = Debug|x64
+		{3093442F-8EA6-415A-9901-245F05ABD778}.Debug|x64.Build.0 = Debug|x64
+		{3093442F-8EA6-415A-9901-245F05ABD778}.Release|x64.ActiveCfg = Release|x64
+		{3093442F-8EA6-415A-9901-245F05ABD778}.Release|x64.Build.0 = Release|x64
+		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Debug|x64.ActiveCfg = Debug|x64
+		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Debug|x64.Build.0 = Debug|x64
+		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Release|x64.ActiveCfg = Release|x64
+		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {258228E7-ECDC-4CCB-9B5C-75B90D234CB8}
+	EndGlobalSection
+EndGlobal
