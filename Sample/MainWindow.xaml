@@ -8,6 +8,8 @@
         Title="libfreenect2.Net Sample" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        
+        <TextBox Name="log"
+                 IsReadOnly="True" TextWrapping="NoWrap"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>

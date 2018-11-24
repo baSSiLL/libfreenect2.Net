@@ -4,3 +4,4 @@ libfreenect2/
 *.aps
 Debug/
 Release/
+*.csproj.user
