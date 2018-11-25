@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace System;
+
 namespace libfreenect2Net
 {
 	namespace Internals
@@ -13,20 +15,27 @@ namespace libfreenect2Net
 		protected:
 			ManagedWrapper(T* instance)
 			{
+				if (instance == nullptr)
+					throw gcnew ArgumentNullException("instance");
+
 				_instance = instance;
 			}
 
 			!ManagedWrapper()
 			{
-				if (_instance != nullptr)
-				{
-					delete _instance;
-				}
+				delete _instance;
 			}
 
+		protected:
 			property T* Instance
 			{
 				T* get() { return _instance; }
+			}
+
+		internal:
+			static operator T*(ManagedWrapper^ wrapper)
+			{
+				return wrapper == nullptr ? nullptr : wrapper->Instance;
 			}
 
 		public:

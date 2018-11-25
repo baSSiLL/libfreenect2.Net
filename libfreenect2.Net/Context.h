@@ -2,8 +2,11 @@
 
 #include <libfreenect2\libfreenect2.hpp>
 #include "ManagedWrapper.h"
+#include "Device.h"
+#include "PacketPipeline.h"
 
 using namespace System;
+using namespace System::Runtime::InteropServices;
 
 namespace libfreenect2Net
 {
@@ -14,5 +17,8 @@ namespace libfreenect2Net
 		int EnumerateDevices();
 		String^ GetDeviceSerialNumber(int deviceIndex);
 		String^ GetDefaultDeviceSerialNumber();
+		Device^ OpenDevice(int deviceIndex, [Optional] PacketPipeline^ pipeline);
+		Device^ OpenDevice(String^ serialNumber, [Optional] PacketPipeline^ pipeline);
+		Device^ OpenDefaultDevice([Optional] PacketPipeline^ pipeline);
 	};
 }

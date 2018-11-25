@@ -26,6 +26,11 @@ namespace Sample
                 var defaultSerial = context.GetDefaultDeviceSerialNumber();
                 sb.AppendFormat("Default serial: {0}", defaultSerial);
                 sb.AppendLine();
+
+                using (var defaultDevice = context.OpenDefaultDevice())
+                {
+
+                }
             }
 
             log.Text = sb.ToString();

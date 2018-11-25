@@ -83,11 +83,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Context.h" />
+    <ClInclude Include="Device.h" />
     <ClInclude Include="ManagedWrapper.h" />
+    <ClInclude Include="PacketPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="PacketPipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
