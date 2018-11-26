@@ -35,7 +35,7 @@ namespace libfreenect2Net
 		internal:
 			static operator T*(ManagedWrapper^ wrapper)
 			{
-				return wrapper == nullptr ? nullptr : wrapper->Instance;
+				return Object::ReferenceEquals(wrapper, nullptr) ? nullptr : wrapper->Instance;
 			}
 
 		public:

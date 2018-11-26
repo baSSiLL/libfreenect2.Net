@@ -6,4 +6,9 @@ namespace libfreenect2Net
 		: ManagedWrapper(instance)
 	{
 	}
+
+	PacketPipeline::operator PacketPipeline^ (libfreenect2::PacketPipeline* instance)
+	{
+		return instance == nullptr ? nullptr : gcnew PacketPipeline(instance);
+	}
 }

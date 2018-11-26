@@ -14,5 +14,24 @@ namespace libfreenect2Net
 
 	internal:
 		static explicit operator Device^ (libfreenect2::Freenect2Device* instance);
+
+	public:
+		virtual ~Device();
+
+		property String^ SerialNumber
+		{ 
+			String^ get(); 
+		};
+
+		property String^ FirmwareVersion
+		{
+			String^ get();
+		}
+
+		void StartAll();
+		void StartRgb();
+		void StartDepth();
+		void Stop();
+		void Close();
 	};
 }

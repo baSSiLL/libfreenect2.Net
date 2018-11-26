@@ -7,7 +7,10 @@ namespace libfreenect2Net
 {
 	public ref class PacketPipeline : public Internals::ManagedWrapper<libfreenect2::PacketPipeline>
 	{
-	internal:
+	private:
 		PacketPipeline(libfreenect2::PacketPipeline* instance);
+
+	internal:
+		static explicit operator PacketPipeline^ (libfreenect2::PacketPipeline* instance);
 	};
 }
