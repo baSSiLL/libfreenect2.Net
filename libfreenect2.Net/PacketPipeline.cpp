@@ -1,4 +1,5 @@
 #include "PacketPipeline.h"
+#include "Implementation.h"
 
 namespace libfreenect2Net
 {
@@ -9,6 +10,6 @@ namespace libfreenect2Net
 
 	PacketPipeline::operator PacketPipeline^ (libfreenect2::PacketPipeline* instance)
 	{
-		return instance == nullptr ? nullptr : gcnew PacketPipeline(instance);
+		return CAST_TO_MANAGED(PacketPipeline, instance);
 	}
 }

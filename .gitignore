@@ -5,3 +5,4 @@ libfreenect2/
 Debug/
 Release/
 *.csproj.user
+packages/
