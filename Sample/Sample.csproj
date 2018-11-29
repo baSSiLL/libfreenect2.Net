@@ -85,6 +85,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)libfreenect2\bin\*" "$(TargetDir)" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)libfreenect2\$(Configuration)\bin\*" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
