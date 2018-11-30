@@ -105,11 +105,13 @@ namespace Sample
 
                 if (reportToLog)
                 {
-                    var message = $"Total frames received: color={colorCount}, depth={depthCount}, infra red={infraRedCount}";
+                    var message = $"Recent frame: type={frameType}, data format={frame.DataFormat}, timestamp={frame.TimeStamp}, sequence={frame.Sequence}, width={frame.Width}, height={frame.Height}, bpp={frame.BytesPerPixel}, has error={frame.HasError}";
+                    _logger.Invoke(message);
+                    message = $"Total frames received: color={colorCount}, depth={depthCount}, infra red={infraRedCount}";
                     _logger.Invoke(message);
                 }
 
-                return true;
+                return false;
             }
         }
     }

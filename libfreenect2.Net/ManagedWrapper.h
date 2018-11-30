@@ -11,6 +11,7 @@ namespace libfreenect2Net
 		{
 		private:
 			initonly T* _instance;
+			bool _detached;
 
 		protected:
 			ManagedWrapper(T* instance)
@@ -19,23 +20,44 @@ namespace libfreenect2Net
 					throw gcnew ArgumentNullException("instance");
 
 				_instance = instance;
+				_detached = false;
 			}
 
 			!ManagedWrapper()
 			{
-				delete _instance;
+				if (!_detached)
+				{
+					delete _instance;
+				}
 			}
 
-		protected:
 			property T* Instance
 			{
-				T* get() { return _instance; }
+				T* get() 
+				{ 
+					if (_detached)
+						throw gcnew InvalidOperationException("This wrapper is detached.");
+
+					return _instance; 
+				}
 			}
 
 		internal:
 			static operator T*(ManagedWrapper^ wrapper)
 			{
 				return Object::ReferenceEquals(wrapper, nullptr) ? nullptr : wrapper->Instance;
+			}
+
+			/// <summary>Detaches this wrapper from underlying managed instance.</summary>
+			/// <remarks>
+			/// When detached
+			/// * <see cref="Instance"/> property cannot be accessed anymore;
+			/// * underlying unmanaged instance is not deleted automatically when this object is disposed/finalized.
+			/// This action is irreversible.
+			/// </remarks>
+			void Detach()
+			{
+				_detached = true;
 			}
 
 		public:
