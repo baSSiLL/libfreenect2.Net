@@ -12,6 +12,7 @@ namespace libfreenect2Net
 		private:
 			initonly T* _instance;
 			bool _detached;
+			bool _disposed;
 
 		protected:
 			ManagedWrapper(T* instance)
@@ -21,13 +22,19 @@ namespace libfreenect2Net
 
 				_instance = instance;
 				_detached = false;
+				_disposed = false;
 			}
 
 			!ManagedWrapper()
 			{
-				if (!_detached)
+				if (!_disposed)
 				{
-					delete _instance;
+					if (!_detached)
+					{
+						delete _instance;
+						Detach();
+					}
+					_disposed = true;
 				}
 			}
 
@@ -64,6 +71,11 @@ namespace libfreenect2Net
 			virtual ~ManagedWrapper()
 			{
 				this->!ManagedWrapper();
+			}
+
+			property bool IsDisposed
+			{
+				bool get() { return _disposed; }
 			}
 		};
 	}

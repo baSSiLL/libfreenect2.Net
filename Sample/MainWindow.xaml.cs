@@ -30,9 +30,6 @@ namespace Sample
                 {
                     if (device != null)
                     {
-                        var firmwareVersion = device.FirmwareVersion;
-                        LogMessage("Default firmware: {0}", firmwareVersion);
-
                         var listener = new FrameListener(message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
                         device.SetColorListener(listener);
                         device.SetDepthListener(listener);
@@ -44,6 +41,26 @@ namespace Sample
 
                         device.Stop();
                         LogMessage("Stopped");
+
+                        // Firmware version seems not to be updated before getting some data from the device.
+                        // So output it here, after reading a few frames.
+                        var firmwareVersion = device.FirmwareVersion;
+                        LogMessage("Default firmware: {0}", firmwareVersion);
+
+                        // Try to create another instance of the same device
+                        {
+                            device.Dispose();
+                            var device2 = context.OpenDefaultDevice();
+                            if (device2 != null)
+                            {
+                                LogMessage("Opened another instance of the same device after disposing the first one");
+                                device2.Dispose();
+                            }
+                            else
+                            {
+                                LogMessage("Could not open another instance of the device");
+                            }
+                        };
                     }
                 }
             }

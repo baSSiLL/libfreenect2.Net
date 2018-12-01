@@ -6,16 +6,35 @@ namespace libfreenect2Net
 	Device::Device(libfreenect2::Freenect2Device* instance)
 		: ManagedWrapper(instance)
 	{
-	}
-
-	Device::~Device()
-	{
-		Instance->close();
+		System::Collections::Concurrent::ConcurrentDictionary<IntPtr, Device^>^ dict = gcnew System::Collections::Concurrent::ConcurrentDictionary<IntPtr, Device^>();
 	}
 
 	Device::operator Device^ (libfreenect2::Freenect2Device* instance)
 	{
-		return CAST_TO_MANAGED(Device, instance);
+		if (instance == nullptr)
+			return nullptr;
+
+		IntPtr key = IntPtr(instance);
+		// Create a new instance beforehand (little overhead)
+		Device^ newWrapper = gcnew Device(instance);
+		Device^ result = _instanceWrapperMap->GetOrAdd(key, newWrapper);
+		if (!ReferenceEquals(result, newWrapper))
+		{
+			// There is existing instance already => throw away the new one
+			newWrapper->Detach();
+		}
+		return result;
+	}
+
+	Device::~Device()
+	{
+		if (!this->IsDisposed)
+		{
+			IntPtr key = IntPtr(Instance);
+			Device^ value = this;
+			Device^% valueRef = value;
+			_instanceWrapperMap->TryRemove(key, valueRef);
+		}
 	}
 
 	String^ Device::SerialNumber::get()

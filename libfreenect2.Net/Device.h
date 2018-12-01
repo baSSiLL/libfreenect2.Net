@@ -6,12 +6,15 @@
 #include "FrameListener.h"
 
 using namespace System;
+using namespace System::Collections::Concurrent;
 
 namespace libfreenect2Net
 {
 	public ref class Device : public Internals::ManagedWrapper<libfreenect2::Freenect2Device>
 	{
 	private:
+		static initonly ConcurrentDictionary<IntPtr, Device^>^ _instanceWrapperMap = gcnew ConcurrentDictionary<IntPtr, Device^>();
+
 		FrameListenerAdapter* _colorListener;
 		FrameListenerAdapter* _depthListener;
 
