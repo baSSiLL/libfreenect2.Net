@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfreenect2.Net", "libfree
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libfreenect2.Net.Test", "libfreenect2.Net.Test\libfreenect2.Net.Test.csproj", "{427222EA-3C4D-48AD-9FED-0E410C6B5DDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Debug|x64.Build.0 = Debug|x64
 		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Release|x64.ActiveCfg = Release|x64
 		{351B34E4-35CF-4D07-A62A-3F9FF3BA0EC5}.Release|x64.Build.0 = Release|x64
+		{427222EA-3C4D-48AD-9FED-0E410C6B5DDB}.Debug|x64.ActiveCfg = Debug|x64
+		{427222EA-3C4D-48AD-9FED-0E410C6B5DDB}.Debug|x64.Build.0 = Debug|x64
+		{427222EA-3C4D-48AD-9FED-0E410C6B5DDB}.Release|x64.ActiveCfg = Release|Any CPU
+		{427222EA-3C4D-48AD-9FED-0E410C6B5DDB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
