@@ -39,10 +39,10 @@ namespace libfreenect2Net
 		void SetColorListener(IFrameListener^ listener);
 		void SetDepthListener(IFrameListener^ listener);
 
-		void StartAll();
-		void StartColor();
-		void StartDepth();
-		void Stop();
-		void Close();
+		bool StartAll();
+		bool StartColor();
+		bool StartDepth();
+		bool Stop();
+		bool Close();
 	};
 }

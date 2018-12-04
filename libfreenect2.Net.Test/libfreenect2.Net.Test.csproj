@@ -79,6 +79,7 @@
     <Compile Include="DeviceOpenTests.cs" />
     <Compile Include="DeviceEnumerationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamingTests.cs" />
     <Compile Include="TestClassWithContext.cs" />
   </ItemGroup>
   <ItemGroup>

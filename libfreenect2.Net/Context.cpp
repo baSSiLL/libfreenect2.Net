@@ -28,28 +28,22 @@ namespace libfreenect2Net
 		return gcnew String(result.c_str());
 	}
 
-	Device^ Context::OpenDevice(int deviceIndex, PacketPipeline^ pipeline)
+	Device^ Context::OpenDevice(int deviceIndex)
 	{
-		Freenect2Device* result = pipeline == nullptr
-			? Instance->openDevice(deviceIndex)
-			: Instance->openDevice(deviceIndex, pipeline);
+		Freenect2Device* result = Instance->openDevice(deviceIndex);
 		return static_cast<Device^>(result);
 	}
 
-	Device^ Context::OpenDevice(String^ serialNumber, PacketPipeline^ pipeline)
+	Device^ Context::OpenDevice(String^ serialNumber)
 	{
 		std::string sSerialNumber = marshal_as<std::string>(serialNumber);
-		Freenect2Device* result = pipeline == nullptr
-			? Instance->openDevice(sSerialNumber)
-			: Instance->openDevice(sSerialNumber, pipeline);
+		Freenect2Device* result = Instance->openDevice(sSerialNumber);
 		return static_cast<Device^>(result);
 	}
 
-	Device^ Context::OpenDefaultDevice(PacketPipeline^ pipeline)
+	Device^ Context::OpenDefaultDevice()
 	{
-		Freenect2Device* result = pipeline == nullptr
-			? Instance->openDefaultDevice()
-			: Instance->openDefaultDevice(pipeline);
+		Freenect2Device* result = Instance->openDefaultDevice();
 		return static_cast<Device^>(result);
 	}
 }

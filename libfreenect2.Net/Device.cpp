@@ -73,28 +73,28 @@ namespace libfreenect2Net
 		_depthListener = adapter;
 	}
 
-	void Device::StartAll()
+	bool Device::StartAll()
 	{
-		Instance->start();
+		return Instance->start();
 	}
 
-	void Device::StartColor()
+	bool Device::StartColor()
 	{
-		Instance->startStreams(true, false);
+		return Instance->startStreams(true, false);
 	}
 
-	void Device::StartDepth()
+	bool Device::StartDepth()
 	{
-		Instance->startStreams(false, true);
+		return Instance->startStreams(false, true);
 	}
 
-	void Device::Stop()
+	bool Device::Stop()
 	{
-		Instance->stop();
+		return Instance->stop();
 	}
 
-	void Device::Close()
+	bool Device::Close()
 	{
-		Instance->close();
+		return Instance->close();
 	}
 }

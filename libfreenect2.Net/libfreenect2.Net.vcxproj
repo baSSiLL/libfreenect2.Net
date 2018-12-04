@@ -90,7 +90,6 @@
     <ClInclude Include="FrameType.h" />
     <ClInclude Include="Implementation.h" />
     <ClInclude Include="ManagedWrapper.h" />
-    <ClInclude Include="PacketPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
@@ -98,7 +97,6 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="FrameListener.cpp" />
-    <ClCompile Include="PacketPipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
