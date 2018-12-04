@@ -7,9 +7,30 @@
         mc:Ignorable="d"
         Title="libfreenect2.Net Sample" Height="450" Width="800"
         Loaded="Window_Loaded">
-    <Grid>
-        <TextBox Name="log"
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="5,2"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Name="Start" 
+                    Click="Start_Click">
+                Start
+            </Button>
+            <Button Name="Stop" 
+                    IsEnabled="False"
+                    Click="Stop_Click">
+                Stop
+            </Button>
+        </StackPanel>
+        <TextBox Name="Log"
                  IsReadOnly="True" TextWrapping="NoWrap"
                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
-    </Grid>
+    </DockPanel>
 </Window>

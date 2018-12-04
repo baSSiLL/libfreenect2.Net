@@ -11,6 +11,9 @@ namespace Sample
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Context _context;
+        private Device _device;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -18,118 +21,77 @@ namespace Sample
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            using (var context = new Context())
-            {
-                var deviceCount = context.EnumerateDevices();
-                LogMessage("Found {0} device(s)", deviceCount);
+            _context = new Context();
 
-                var defaultSerial = context.GetDefaultDeviceSerialNumber();
-                LogMessage("Default serial: {0}", defaultSerial);
+            var deviceCount = _context.EnumerateDevices();
+            LogMessage("Found {0} device(s)", deviceCount);
 
-                using (var device = context.OpenDefaultDevice())
-                {
-                    if (device != null)
-                    {
-                        var listener = new FrameListener(message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
-                        device.SetColorListener(listener);
-                        device.SetDepthListener(listener);
+            var defaultSerial = _context.GetDefaultDeviceSerialNumber();
+            LogMessage("Default serial: {0}", defaultSerial);
+        }
 
-                        device.StartAll();
-                        LogMessage("Started");
+        protected override void OnClosed(EventArgs e)
+        {
+            _context?.Dispose();
 
-                        await Task.Delay(TimeSpan.FromSeconds(3));
-
-                        device.Stop();
-                        LogMessage("Stopped");
-
-                        // Firmware version seems not to be updated before getting some data from the device.
-                        // So output it here, after reading a few frames.
-                        var firmwareVersion = device.FirmwareVersion;
-                        LogMessage("Default firmware: {0}", firmwareVersion);
-
-                        // Try to create another instance of the same device
-                        {
-                            device.Dispose();
-                            var device2 = context.OpenDefaultDevice();
-                            if (device2 != null)
-                            {
-                                LogMessage("Opened another instance of the same device after disposing the first one");
-                                device2.Dispose();
-                            }
-                            else
-                            {
-                                LogMessage("Could not open another instance of the device");
-                            }
-                        };
-                    }
-                }
-            }
+            base.OnClosed(e);
         }
 
         private void LogMessage(string messageOrFormat, params object[] args)
         {
-            log.AppendText(
+            Log.AppendText(
                 $"[{DateTime.Now.ToString("HH':'mm':'ss.fff")}]" + 
                 string.Format(messageOrFormat, args) + 
                 Environment.NewLine);
         }
 
 
-        private class FrameListener : IFrameListener
+
+        private void Start_Click(object sender, RoutedEventArgs e)
         {
-            private static readonly TimeSpan LogInterval = TimeSpan.FromSeconds(0.5);
-
-            private readonly Action<string> _logger;
-            private readonly Stopwatch _stopwatch;
-            private long _colorCount = 0;
-            private long _depthCount = 0;
-            private long _infraRedCount = 0;
-
-            public FrameListener(Action<string> logger)
+            if (_device != null)
             {
-                _logger = logger;
-                _stopwatch = Stopwatch.StartNew();
+                LogMessage("Already started");
+                return;
             }
 
-            public bool OnNewFrame(FrameType frameType, Frame frame)
+            _device = _context.OpenDefaultDevice();
+            if (_device == null)
             {
-                var reportToLog = false;
-                long colorCount, depthCount, infraRedCount;
-                lock (_stopwatch)
-                {
-                    switch (frameType)
-                    {
-                        case FrameType.Color:
-                            _colorCount++;
-                            break;
-                        case FrameType.Depth:
-                            _depthCount++;
-                            break;
-                        case FrameType.InfraRed:
-                            _infraRedCount++;
-                            break;
-                    }
-                    colorCount = _colorCount;
-                    depthCount = _depthCount;
-                    infraRedCount = _infraRedCount;
-
-                    if (_stopwatch.Elapsed >= LogInterval)
-                    {
-                        reportToLog = true;
-                        _stopwatch.Restart();
-                    }
-                }
-
-                if (reportToLog)
-                {
-                    var message = $"Recent frame: type={frameType}, data format={frame.DataFormat}, timestamp={frame.TimeStamp}, sequence={frame.Sequence}, width={frame.Width}, height={frame.Height}, bpp={frame.BytesPerPixel}, has error={frame.HasError}";
-                    _logger.Invoke(message);
-                    message = $"Total frames received: color={colorCount}, depth={depthCount}, infra red={infraRedCount}";
-                    _logger.Invoke(message);
-                }
-
-                return false;
+                LogMessage("Could not open default device");
+                return;
             }
+
+            Start.IsEnabled = false;
+            Stop.IsEnabled = true;
+
+            var listener = new FrameListener(message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
+            _device.SetColorListener(listener);
+            _device.SetDepthListener(listener);
+
+            _device.StartAll();
+            LogMessage("Started");
+
+            var firmwareVersion = _device.FirmwareVersion;
+            LogMessage("Device firmware: {0}", firmwareVersion);
+        }
+
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            if (_device == null)
+            {
+                LogMessage("Not started yet");
+                return;
+            }
+
+            _device.Stop();
+            LogMessage("Stopped");
+
+            _device.Dispose();
+            _device = null;
+
+            Start.IsEnabled = true;
+            Stop.IsEnabled = false;
         }
     }
 }
