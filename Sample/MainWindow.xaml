@@ -29,8 +29,14 @@
                 Stop
             </Button>
         </StackPanel>
-        <TextBox Name="Log"
-                 IsReadOnly="True" TextWrapping="NoWrap"
-                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <Expander DockPanel.Dock="Bottom" 
+                  ExpandDirection="Up" MaxHeight="200"
+                  Header="Log">
+            <TextBox Name="Log"
+                     IsReadOnly="True" TextWrapping="NoWrap"
+                     HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        </Expander>
+
+        <Image Name="ColorImage"/>
     </DockPanel>
 </Window>

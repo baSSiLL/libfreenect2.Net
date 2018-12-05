@@ -1,8 +1,9 @@
 ﻿using libfreenect2Net;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Sample
 {
@@ -11,15 +12,18 @@ namespace Sample
     /// </summary>
     public partial class MainWindow : Window
     {
+        private WriteableBitmap _colorBitmap;
         private Context _context;
         private Device _device;
+        private FrameQueue _frameQueue;
+        private readonly List<FrameConsumer> _frameConsumers = new List<FrameConsumer>();
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _context = new Context();
 
@@ -28,6 +32,9 @@ namespace Sample
 
             var defaultSerial = _context.GetDefaultDeviceSerialNumber();
             LogMessage("Default serial: {0}", defaultSerial);
+
+            _colorBitmap = new WriteableBitmap(1920, 1080, 96, 96, PixelFormats.Bgr32, null);
+            ColorImage.Source = _colorBitmap;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -65,7 +72,13 @@ namespace Sample
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
 
-            var listener = new FrameListener(message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
+            _frameQueue = new FrameQueue();
+            _frameConsumers.Add(new ColorRenderer(_frameQueue, _colorBitmap));
+            _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.Depth));
+            _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.InfraRed));
+            _frameConsumers.ForEach(fc => fc.Start());
+
+            var listener = new FrameListener(_frameQueue, message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
             _device.SetColorListener(listener);
             _device.SetDepthListener(listener);
 
@@ -89,6 +102,10 @@ namespace Sample
 
             _device.Dispose();
             _device = null;
+
+            _frameConsumers.ForEach(fc => fc.Stop());
+            _frameConsumers.Clear();
+            _frameQueue.Dispose();
 
             Start.IsEnabled = true;
             Stop.IsEnabled = false;

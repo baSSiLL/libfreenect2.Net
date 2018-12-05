@@ -64,7 +64,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ColorRenderer.cs" />
+    <Compile Include="DummyFrameConsumer.cs" />
+    <Compile Include="FrameConsumer.cs" />
     <Compile Include="FrameListener.cs" />
+    <Compile Include="FrameQueue.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
