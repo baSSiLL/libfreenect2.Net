@@ -13,6 +13,7 @@ namespace Sample
     public partial class MainWindow : Window
     {
         private WriteableBitmap _colorBitmap;
+        private WriteableBitmap _depthBitmap;
         private Context _context;
         private Device _device;
         private FrameQueue _frameQueue;
@@ -33,8 +34,11 @@ namespace Sample
             var defaultSerial = _context.GetDefaultDeviceSerialNumber();
             LogMessage("Default serial: {0}", defaultSerial);
 
-            _colorBitmap = new WriteableBitmap(1920, 1080, 96, 96, PixelFormats.Bgr32, null);
+            _colorBitmap = new WriteableBitmap(Context.ColorFrameWidth, Context.ColorFrameHeight, 96, 96, PixelFormats.Bgr32, null);
             ColorImage.Source = _colorBitmap;
+
+            _depthBitmap = new WriteableBitmap(Context.DepthFrameWidth, Context.DepthFrameHeight, 96, 96, PixelFormats.Gray8, null);
+            DepthImage.Source = _depthBitmap;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -74,7 +78,7 @@ namespace Sample
 
             _frameQueue = new FrameQueue();
             _frameConsumers.Add(new ColorRenderer(_frameQueue, _colorBitmap));
-            _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.Depth));
+            _frameConsumers.Add(new DepthRenderer(_frameQueue, _depthBitmap));
             _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.InfraRed));
             _frameConsumers.ForEach(fc => fc.Start());
 

@@ -12,6 +12,12 @@ namespace libfreenect2Net
 	public ref class Context : public Internals::ManagedWrapper<libfreenect2::Freenect2>
 	{
 	public:
+		static initonly int ColorFrameWidth = 1920;
+		static initonly int ColorFrameHeight = 1080;
+		static initonly int DepthFrameWidth = 512;
+		static initonly int DepthFrameHeight = 424;
+
+	public:
 		Context();
 		int EnumerateDevices();
 		String^ GetDeviceSerialNumber(int deviceIndex);
