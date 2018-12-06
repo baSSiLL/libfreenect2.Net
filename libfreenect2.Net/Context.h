@@ -3,6 +3,7 @@
 #include <libfreenect2\libfreenect2.hpp>
 #include "ManagedWrapper.h"
 #include "Device.h"
+#include "StreamProcessors.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -22,8 +23,8 @@ namespace libfreenect2Net
 		int EnumerateDevices();
 		String^ GetDeviceSerialNumber(int deviceIndex);
 		String^ GetDefaultDeviceSerialNumber();
-		Device^ OpenDevice(int deviceIndex);
-		Device^ OpenDevice(String^ serialNumber);
-		Device^ OpenDefaultDevice();
+		Device^ OpenDevice(int deviceIndex, [Optional] ColorProcessor colorProcessor, [Optional] DepthProcessor depthProcessor);
+		Device^ OpenDevice(String^ serialNumber, [Optional] ColorProcessor colorProcessor, [Optional] DepthProcessor depthProcessor);
+		Device^ OpenDefaultDevice([Optional] ColorProcessor colorProcessor, [Optional] DepthProcessor depthProcessor);
 	};
 }

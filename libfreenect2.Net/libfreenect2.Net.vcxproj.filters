@@ -35,6 +35,12 @@
     <ClInclude Include="FrameDataFormat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StreamProcessors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompositePacketPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -50,6 +56,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CompositePacketPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketPipelineFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

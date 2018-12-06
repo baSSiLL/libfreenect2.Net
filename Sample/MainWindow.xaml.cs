@@ -66,7 +66,14 @@ namespace Sample
                 return;
             }
 
-            _device = _context.OpenDefaultDevice();
+            try
+            {
+                _device = _context.OpenDefaultDevice();
+            }
+            catch (NotSupportedException ex)
+            {
+                LogMessage(ex.Message);
+            }
             if (_device == null)
             {
                 LogMessage("Could not open default device");
