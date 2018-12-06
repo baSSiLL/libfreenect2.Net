@@ -68,7 +68,7 @@ namespace Sample
 
             try
             {
-                _device = _context.OpenDefaultDevice();
+                _device = _context.OpenDefaultDevice(colorProcessor: ColorProcessor.None);
             }
             catch (NotSupportedException ex)
             {
@@ -84,7 +84,7 @@ namespace Sample
             Stop.IsEnabled = true;
 
             _frameQueue = new FrameQueue();
-            _frameConsumers.Add(new ColorRenderer(_frameQueue, _colorBitmap));
+            _frameConsumers.Add(new JpegRenderer(_frameQueue, _colorBitmap));
             _frameConsumers.Add(new DepthRenderer(_frameQueue, _depthBitmap));
             _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.InfraRed));
             _frameConsumers.ForEach(fc => fc.Start());
