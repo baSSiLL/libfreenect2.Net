@@ -2,6 +2,7 @@
 #include "Implementation.h"
 
 using namespace System;
+using namespace libfreenect2Net::Internals;
 
 namespace libfreenect2Net
 {
@@ -13,7 +14,9 @@ namespace libfreenect2Net
 	}
 
 	Frame::Frame(int width, int height, FrameDataFormat dataFormat)
-		: ManagedWrapper(new libfreenect2::Frame(width, height, GetBytesPerPixelForDataFormat(dataFormat)))
+		: ManagedWrapper(new libfreenect2::Frame(Checks::IsPositive(width, "width"), 
+												 Checks::IsPositive(height, "height"), 
+												 GetBytesPerPixelForDataFormat(dataFormat)))
 	{
 		Instance->format = ConvertDataFormat(dataFormat);
 	}
@@ -28,12 +31,12 @@ namespace libfreenect2Net
 		switch (DataFormat)
 		{
 		case FrameDataFormat::Raw:
-			return Instance->bytes_per_pixel;
+			return BytesPerPixel;
 		case FrameDataFormat::Bgrx:
 		case FrameDataFormat::Rgbx:
 		case FrameDataFormat::Float:
 		case FrameDataFormat::Gray:
-			return Instance->bytes_per_pixel * Width * Height;
+			return BytesPerPixel * Width * Height;
 		default:
 			return -1;
 		}

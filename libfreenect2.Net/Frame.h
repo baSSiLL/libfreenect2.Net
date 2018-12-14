@@ -34,6 +34,16 @@ namespace libfreenect2Net
 		static explicit operator Frame^ (libfreenect2::Frame* instance);
 
 	public:
+		/// <summary>
+		/// Creates a new instance of <see cref="Frame"/> with specified
+		/// dimensions and data format.
+		/// </summary>
+		/// <param name="width">Frame width.</param>
+		/// <param name="height">Frame height.</param>
+		/// <param name="dataFormat">
+		/// Frame's data format.
+		/// <c>Raw</c> and <c>Invalid</c> are not allowed.
+		/// </param>
 		Frame(int width, int height, FrameDataFormat dataFormat);
 
 		property int Width
