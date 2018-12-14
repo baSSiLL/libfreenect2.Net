@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using libfreenect2Net;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using libfreenect2Net;
 
 namespace Sample
 {
-    internal class JpegRenderer : FrameConsumer
+    internal class JpegRenderer : SingleFrameConsumer
     {
         private readonly WriteableBitmap _bitmap;
 
@@ -24,8 +18,6 @@ namespace Sample
 
         protected override void StartProcessing(Frame frame)
         {
-            base.StartProcessing(frame);
-
             if (frame.DataFormat != FrameDataFormat.Raw)
             {
                 OnProcessingFinished(frame);
@@ -37,7 +29,7 @@ namespace Sample
 
         private unsafe void RenderFrame(Frame frame)
         {
-            using (var stream = new UnmanagedMemoryStream((byte*)frame.Data.ToPointer(), frame.BytesPerPixel))
+            using (var stream = new UnmanagedMemoryStream((byte*)frame.Data.ToPointer(), frame.DataSize))
             {
                 var decoder = new JpegBitmapDecoder(stream, BitmapCreateOptions.None, BitmapCacheOption.Default);
                 BitmapSource decodedImage = decoder.Frames[0];

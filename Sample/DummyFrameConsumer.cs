@@ -1,23 +1,18 @@
-﻿using System;
+﻿using libfreenect2Net;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using libfreenect2Net;
 
 namespace Sample
 {
     internal class DummyFrameConsumer : FrameConsumer
     {
-        public DummyFrameConsumer(FrameQueue queue, FrameType frameType) 
-            : base(queue, frameType)
+        public DummyFrameConsumer(FrameQueue queue, params FrameType[] frameTypes) 
+            : base(queue, frameTypes)
         {
         }
 
-        protected override void StartProcessing(Frame frame)
+        protected override void StartProcessing(IReadOnlyDictionary<FrameType, Frame> frames)
         {
-            base.StartProcessing(frame);
-            OnProcessingFinished(frame);
+            OnProcessingFinished(frames);
         }
     }
 }

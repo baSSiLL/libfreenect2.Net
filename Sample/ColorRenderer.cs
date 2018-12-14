@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace Sample
 {
-    internal class ColorRenderer : FrameConsumer
+    internal class ColorRenderer : SingleFrameConsumer
     {
         private readonly WriteableBitmap _bitmap;
 
@@ -19,8 +19,6 @@ namespace Sample
 
         protected override void StartProcessing(Frame frame)
         {
-            base.StartProcessing(frame);
-
             _bitmap.Dispatcher.BeginInvoke(new Action<Frame>(RenderFrame), frame);
         }
 
@@ -33,7 +31,7 @@ namespace Sample
             {
                 var rect = new Int32Rect(0, 0, frame.Width, frame.Height);
                 _bitmap.WritePixels(rect, frame.Data, 
-                    frame.Width * frame.Height * frame.BytesPerPixel, 
+                    frame.DataSize, 
                     frame.Width * frame.BytesPerPixel);
             }
 

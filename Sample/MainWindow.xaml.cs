@@ -16,8 +16,10 @@ namespace Sample
         private WriteableBitmap _depthBitmap;
         private Context _context;
         private Device _device;
-        private FrameQueue _frameQueue;
+        private FrameQueue _frameQueueSource;
+        private FrameQueue _frameQueueRegistered;
         private readonly List<FrameConsumer> _frameConsumers = new List<FrameConsumer>();
+        private Registration _registration;
 
         public MainWindow()
         {
@@ -34,7 +36,7 @@ namespace Sample
             var defaultSerial = _context.GetDefaultDeviceSerialNumber();
             LogMessage("Default serial: {0}", defaultSerial);
 
-            _colorBitmap = new WriteableBitmap(Context.ColorFrameWidth, Context.ColorFrameHeight, 96, 96, PixelFormats.Bgr32, null);
+            _colorBitmap = new WriteableBitmap(Context.DepthFrameWidth, Context.DepthFrameHeight, 96, 96, PixelFormats.Bgr32, null);
             ColorImage.Source = _colorBitmap;
 
             _depthBitmap = new WriteableBitmap(Context.DepthFrameWidth, Context.DepthFrameHeight, 96, 96, PixelFormats.Gray8, null);
@@ -68,7 +70,7 @@ namespace Sample
 
             try
             {
-                _device = _context.OpenDefaultDevice(colorProcessor: ColorProcessor.None);
+                _device = _context.OpenDefaultDevice();
             }
             catch (NotSupportedException ex)
             {
@@ -83,21 +85,26 @@ namespace Sample
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
 
-            _frameQueue = new FrameQueue();
-            _frameConsumers.Add(new JpegRenderer(_frameQueue, _colorBitmap));
-            _frameConsumers.Add(new DepthRenderer(_frameQueue, _depthBitmap));
-            _frameConsumers.Add(new DummyFrameConsumer(_frameQueue, FrameType.InfraRed));
-            _frameConsumers.ForEach(fc => fc.Start());
+            _frameQueueSource = new FrameQueue();
+            _frameQueueRegistered = new FrameQueue();
+            _frameConsumers.Add(new DummyFrameConsumer(_frameQueueSource, FrameType.InfraRed));
+            _frameConsumers.Add(new ColorRenderer(_frameQueueRegistered, _colorBitmap));
+            _frameConsumers.Add(new DepthRenderer(_frameQueueRegistered, _depthBitmap));
 
-            var listener = new FrameListener(_frameQueue, message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
+            var listener = new FrameListener(_frameQueueSource, message => Dispatcher.BeginInvoke(new Action(() => LogMessage(message))));
             _device.SetColorListener(listener);
             _device.SetDepthListener(listener);
 
             _device.StartAll();
             LogMessage("Started");
 
+            // Device parameters can only be obtained after start
+            _registration = new Registration(_device.InfraRedCameraParameters, _device.ColorCameraParameters);
             var firmwareVersion = _device.FirmwareVersion;
             LogMessage("Device firmware: {0}", firmwareVersion);
+
+            _frameConsumers.Add(new FrameRegistrationProcessor(_frameQueueSource, _frameQueueRegistered, _registration));
+            _frameConsumers.ForEach(fc => fc.Start());
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -116,7 +123,9 @@ namespace Sample
 
             _frameConsumers.ForEach(fc => fc.Stop());
             _frameConsumers.Clear();
-            _frameQueue.Dispose();
+            _frameQueueSource.Dispose();
+            _frameQueueRegistered.Dispose();
+            _registration.Dispose();
 
             Start.IsEnabled = true;
             Stop.IsEnabled = false;

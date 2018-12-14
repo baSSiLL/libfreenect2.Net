@@ -39,8 +39,8 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="753*"/>
-                <ColumnDefinition Width="512*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Name="ColorImage" Grid.Column="0"/>
             <Image Name="DepthImage" Grid.Column="1"/>

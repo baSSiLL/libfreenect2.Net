@@ -1,5 +1,7 @@
 ﻿using libfreenect2Net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Sample
@@ -8,13 +10,13 @@ namespace Sample
     {
         private readonly object _sync = new object();
         private readonly FrameQueue _queue;
-        private readonly FrameType _frameType;
+        private readonly FrameType[] _frameTypes;
         private bool _working;
 
-        protected FrameConsumer(FrameQueue queue, FrameType frameType)
+        protected FrameConsumer(FrameQueue queue, params FrameType[] frameTypes)
         {
             _queue = queue;
-            _frameType = frameType;
+            _frameTypes = frameTypes;
         }
 
         public void Start()
@@ -22,9 +24,9 @@ namespace Sample
             lock (_sync) _working = true;
 
             _queue.NewFrameArrived += OnNewFrameArrived;
-            if (_queue.HasPendingFrames(_frameType))
+            if (_frameTypes.All(_queue.HasPendingFrames))
             {
-                ScheduleTryStartProcessingNewFrame();
+                ScheduleTryStartProcessingNewFrames();
             }
         }
 
@@ -40,42 +42,49 @@ namespace Sample
         }
         private bool _isProcessing;
 
-        protected virtual void StartProcessing(Frame frame)
-        {
-        }
+        protected abstract void StartProcessing(IReadOnlyDictionary<FrameType, Frame> frames);
 
-        protected virtual void OnProcessingFinished(Frame frame)
+        protected virtual void OnProcessingFinished(IReadOnlyDictionary<FrameType, Frame> frames)
         {
-            frame.Dispose();
+            foreach (var f in frames.Values)
+            {
+                f.Dispose();
+            }
             IsProcessing = false;
 
-            ScheduleTryStartProcessingNewFrame();
+            ScheduleTryStartProcessingNewFrames();
         }
 
         private void OnNewFrameArrived(object sender, EventArgs e)
         {
             if (!IsProcessing)
             {
-                ScheduleTryStartProcessingNewFrame();
+                ScheduleTryStartProcessingNewFrames();
             }
         }
 
-        private void ScheduleTryStartProcessingNewFrame()
+        private void ScheduleTryStartProcessingNewFrames()
         {
-            ThreadPool.QueueUserWorkItem(_ => TryStartProcessingNewFrame());
+            ThreadPool.QueueUserWorkItem(_ => TryStartProcessingNewFrames());
         }
 
-        private void TryStartProcessingNewFrame()
+        private void TryStartProcessingNewFrames()
         {
-            Frame toProcess = null;
+            IReadOnlyDictionary<FrameType, Frame> toProcess = null;
             lock (_sync)
             {
                 if (_working && !IsProcessing)
                 {
-                    toProcess = _queue.DequeueLatestAndDiscardPrevious(_frameType);
-                    if (toProcess != null)
+                    // Simply take the latest frames of all types
+                    // For real life scenarios some kind of inter-frame synchronization
+                    // should be added, e.g. based on their timestamps
+                    if (_frameTypes.All(_queue.HasPendingFrames))
                     {
-                        IsProcessing = true;
+                        toProcess = _frameTypes.ToDictionary(ft => ft, _queue.DequeueLatestAndDiscardPrevious);
+                        if (toProcess != null)
+                        {
+                            IsProcessing = true;
+                        }
                     }
                 }
             }

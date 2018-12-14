@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace Sample
 {
-    internal class DepthRenderer : FrameConsumer
+    internal class DepthRenderer : SingleFrameConsumer
     {
         private readonly WriteableBitmap _bitmap;
         private readonly byte[] _pixels;
@@ -20,8 +20,6 @@ namespace Sample
 
         protected override void StartProcessing(Frame frame)
         {
-            base.StartProcessing(frame);
-
             var task = RenderFrameAsync(frame);
         }
 
