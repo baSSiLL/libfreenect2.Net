@@ -75,6 +75,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraParametersTests.cs" />
     <Compile Include="ContextBasicTests.cs" />
     <Compile Include="DeviceOpenTests.cs" />
     <Compile Include="DeviceEnumerationTests.cs" />
