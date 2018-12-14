@@ -2,20 +2,40 @@
 
 #include <libfreenect2\libfreenect2.hpp>
 #include "ManagedWrapper.h"
-#include "FrameDataFormat.h"
 
 namespace libfreenect2Net
 {
+	public enum class FrameDataFormat
+	{
+		/// <summary>Invalid format.</summary>
+		Invalid = 0,
+		/// <summary>Raw bitstream. <see cref='Frame::BytesPerPixel'/> defines the total number of bytes.
+		Raw = 1,
+		/// <summary>A 4-byte float per pixel.</summary>
+		Float = 2,
+		/// <summary>4 bytes of B, G, R, and unused per pixel.</summary>
+		Bgrx = 4,
+		/// <summary>4 bytes of R, G, B, and unused per pixel.</summary>
+		Rgbx = 5,
+		/// <summary>1 byte of gray per pixel.</summary>
+		Gray = 6,
+	};
+
+
 	public ref class Frame : public Internals::ManagedWrapper<libfreenect2::Frame>
 	{
 	private:
 		initonly TimeSpan _timeStamp;
 		Frame(libfreenect2::Frame* instance);
+		static int GetBytesPerPixelForDataFormat(FrameDataFormat dataFormat);
+		libfreenect2::Frame::Format ConvertDataFormat(FrameDataFormat value);
 
 	internal:
 		static explicit operator Frame^ (libfreenect2::Frame* instance);
 
 	public:
+		Frame(int width, int height, FrameDataFormat dataFormat);
+
 		property int Width
 		{
 			int get() { return (int)Instance->width; }
@@ -39,6 +59,15 @@ namespace libfreenect2Net
 		property IntPtr Data
 		{
 			IntPtr get() { return IntPtr(Instance->data); }
+		}
+
+		/// <summary>Gets data size in bytes.</summary>
+		/// <remarks>
+		/// Returns <c>-1</c> if the size is undefined (e.g. invalid format).
+		/// </summary>
+		property int DataSize
+		{
+			int get();
 		}
 
 		property TimeSpan TimeStamp

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <libfreenect2\libfreenect2.hpp>
+
 namespace libfreenect2Net
 {
 	/// <summary>Extrinsic camera parameters used for depth-to-color coordinate mapping.</summary>
@@ -35,6 +37,7 @@ namespace libfreenect2Net
 		float my_x0y0; // 1
 	};
 
+
 	public value class ColorCameraParameters
 	{
 	public:
@@ -52,7 +55,12 @@ namespace libfreenect2Net
 
 		/// <summary>Extrinsic parameters.</summary>
 		ExtrinsicCameraParameters Extrinsics;
+
+	internal:
+		static operator libfreenect2::Freenect2Device::ColorCameraParams(ColorCameraParameters value);
+		static operator ColorCameraParameters(const libfreenect2::Freenect2Device::ColorCameraParams& value);
 	};
+
 
 	/// <summary>Parameters of image distortion introduced by infrared sensor.</summary>
 	public value class InfraRedCameraDistortion
@@ -74,6 +82,7 @@ namespace libfreenect2Net
 		float P2;
 	};
 
+
 	public value class InfraRedCameraParameters
 	{
 	public:
@@ -91,5 +100,9 @@ namespace libfreenect2Net
 
 		/// <summary>Parameters of distortion.</summary>
 		InfraRedCameraDistortion Distortion;
+
+	internal:
+		static operator libfreenect2::Freenect2Device::IrCameraParams(InfraRedCameraParameters value);
+		static operator InfraRedCameraParameters(const libfreenect2::Freenect2Device::IrCameraParams& value);
 	};
 }

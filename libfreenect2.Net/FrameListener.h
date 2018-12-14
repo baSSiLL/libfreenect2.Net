@@ -3,11 +3,18 @@
 #include <vcclr.h>
 #include <libfreenect2\libfreenect2.hpp>
 #include "ManagedWrapper.h"
-#include "FrameType.h"
 #include "Frame.h"
 
 namespace libfreenect2Net
 {
+	public enum class FrameType
+	{
+		Color = 1,
+		InfraRed = 2,
+		Depth = 4
+	};
+
+
 	public interface class IFrameListener
 	{
 	public:

@@ -67,6 +67,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>freenect2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,6 +80,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>freenect2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4248 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -87,21 +89,22 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Frame.h" />
-    <ClInclude Include="FrameDataFormat.h" />
     <ClInclude Include="FrameListener.h" />
-    <ClInclude Include="FrameType.h" />
     <ClInclude Include="Implementation.h" />
     <ClInclude Include="ManagedWrapper.h" />
+    <ClInclude Include="Registration.h" />
     <ClInclude Include="StreamProcessors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="CameraParameters.cpp" />
     <ClCompile Include="CompositePacketPipeline.cpp" />
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="FrameListener.cpp" />
     <ClCompile Include="PacketPipelineFactory.cpp" />
+    <ClCompile Include="Registration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
