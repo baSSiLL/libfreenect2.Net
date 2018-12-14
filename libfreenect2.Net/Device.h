@@ -4,6 +4,7 @@
 #include <list>
 #include "ManagedWrapper.h"
 #include "FrameListener.h"
+#include "CameraParameters.h"
 
 using namespace System;
 using namespace System::Collections::Concurrent;
@@ -34,6 +35,16 @@ namespace libfreenect2Net
 		property String^ FirmwareVersion
 		{
 			String^ get();
+		}
+
+		property ColorCameraParameters ColorCameraParameters
+		{
+			libfreenect2Net::ColorCameraParameters get();
+		}
+
+		property InfraRedCameraParameters InfraRedCameraParameters
+		{
+			libfreenect2Net::InfraRedCameraParameters get();
 		}
 
 		void SetColorListener(IFrameListener^ listener);

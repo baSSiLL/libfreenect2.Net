@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraParameters.h" />
     <ClInclude Include="CompositePacketPipeline.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="Device.h" />
